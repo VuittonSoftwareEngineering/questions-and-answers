@@ -1,4 +1,4 @@
 //test first commit
-const test = function (a) {
-  return a
+const test = function (b) {
+  return b
 }
