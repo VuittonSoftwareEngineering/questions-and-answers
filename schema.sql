@@ -30,3 +30,4 @@ CREATE TABLE IF NOT EXISTS photos (
   "url" VARCHAR(255),
   FOREIGN KEY (answer_id) REFERENCES answers(id)
 )
+
