@@ -10,58 +10,42 @@ const {
 } = require('../models')
 
 // questions
-// const getQuestions = async (req, res) => {
-//   const query = {
-//     product_id: req.query.product_id,
-//     count: req.query.count,
-//     page: req.query.page,
-//   };
-//   try {
-//     const questions = await getQuestionsFromDb(query);
-//     console.log('this is the response: ', questions)
-//     res.send(questions);
-//   } catch (err) {
-//     console.log(err);
-//     res.sendStatus(404);
-//   }
-// };
-
-const getQuestions = (req, res) => {
-  getQuestionsFromDb(req.params.product_id, req.params.count, req.params.page)
-   .then(data => res.status(200).send(data))
-   .catch(err => res.status(400));
-};
-
-const getSomeQuestions = async (req, res) => {
+const getQuestions = async (req, res) => {
   try {
-    const questions = await getQuestionsFromDb();
-    res.send(questions);
+    const questions = await getQuestionsFromDb(
+      req.params.product_id,
+      req.params.count,
+      req.params.page
+    );
+    res.send(questions)
   } catch (err) {
     console.log(err);
-    res.sendStatus(404);
+    res.sendStatus(400);
   }
 };
 
-const postQuestion = async (req, res ) => {
-  const query = [
-    req.body.name,
-    req.body.email,
-    req.body.body,
-    req.body.date,
-    req.query.product_id,
-  ];
+const postQuestion = async (req, res) => {
   try {
-    await postQuestionsToDb(query);
+    await postQuestionsToDb([
+      // check if it's in body
+      req.body.product_id,
+      req.body.body,
+      // req.body.date,
+      Date.now(),
+      req.body.name,
+      req.body.email,
+    ]);
     res.sendStatus(201);
   } catch (err) {
     console.log(err);
     res.sendStatus(404);
   }
-};
+}
 
 const updateQuestionHelpfullness = async (req, res) => {
-  const question_id = req.query.question_id;
+  const question_id = req.params.question_id || req.query.question_id;
   try {
+    console.log(req.params.question_id);
     await putQuestionHelpfullnessInDB(question_id);
     res.sendStatus(204);
   } catch (err) {
@@ -71,7 +55,7 @@ const updateQuestionHelpfullness = async (req, res) => {
 };
 
 const reportQuestion = async (req, res) => {
-  const question_id = req.query.question_id;
+  const question_id = req.params.question_id || req.query.question_id;
   try {
     await reportQuestionInDb(question_id);
     res.sendStatus(204);
@@ -84,9 +68,9 @@ const reportQuestion = async (req, res) => {
 // answers
 const getAnswers = async (req, res) => {
   const query = {
-    question_id: req.query.question_id,
-    count: req.query.count,
-    page: req.query.page,
+    question_id: req.params.question_id,
+    count: req.params.count,
+    page: req.params.page,
   };
   try {
     const answers = await getAnswersFromDb(query);
@@ -104,7 +88,6 @@ const postAnswer = async (req, res) => {
     req.body.date,
     req.body.name,
     req.body.email,
-    req.body.photos,
   ];
   try {
     await postAnswerToDb(query);
@@ -116,7 +99,7 @@ const postAnswer = async (req, res) => {
 };
 
 const updateAnswerHelpfullness = async (req, res) => {
-  const answer_id = req.query.answer_id;
+  const answer_id = req.query.answer_id || req.params.answer_id
   try {
     await putAnswerHelpfullnessInDB(answer_id);
     res.sendStatus(204);
@@ -127,7 +110,7 @@ const updateAnswerHelpfullness = async (req, res) => {
 };
 
 const reportAnswer = async (req, res) => {
-  const answer_id = req.query.answer_id;
+  const answer_id = req.query.answer_id || req.params.answer_id;
   try {
     await reportAnswerInDb(answer_id);
     res.sendStatus(204);
@@ -137,9 +120,9 @@ const reportAnswer = async (req, res) => {
   }
 };
 
+
 module.exports = {
   getQuestions,
-  getSomeQuestions,
   postQuestion,
   updateQuestionHelpfullness,
   reportQuestion,

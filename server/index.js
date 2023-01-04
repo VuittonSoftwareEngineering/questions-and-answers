@@ -18,7 +18,7 @@ router.use(cors({
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('dev'));
-app.use(router);
+app.use('/qa', router);
 
 app.listen(port, () => {
    console.log(`App running on http://localhost:${port}`)

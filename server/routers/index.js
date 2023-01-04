@@ -11,16 +11,16 @@ const {
   reportAnswer,
 } = require('../controllers');
 
-// router.get('/', (req, res) => {
-//   res.json({ info: 'Welcome to Node.js, Express, and Postgres API' })
-// });
-router.get('/qa/questions/:product_id/:count?/:page?', getQuestions);
-router.post('/:product_id?', postQuestion);
-router.put('/:question_id?/helpful', updateQuestionHelpfullness);
-router.put('/:question_id?/report', reportQuestion);
-router.get('/qa/questions/:question_id?/answers', getAnswers);
-router.post('/qa/questions/:question_id?/answers', postAnswer);
-router.put('/qa/answers/:answer_id?/helpful', updateAnswerHelpfullness);
-router.put('/qa/answers/:answer_id?/report', reportAnswer);
+router.get('/questions/:product_id?/:count?/:page?', getQuestions);
+router.get('/questions/:question_id/answers', getAnswers);
+
+router.post('/questions', postQuestion);
+router.post('/questions/:question_id/answers', postAnswer);
+
+router.put('/questions/:question_id/helpful', updateQuestionHelpfullness);
+router.put('/answers/:answer_id/helpful', updateAnswerHelpfullness);
+
+router.put('/questions/:question_id/report', reportQuestion);
+router.put('/answers/:answer_id/report', reportAnswer);
 
 module.exports = router;

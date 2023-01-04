@@ -18,16 +18,6 @@ const pool = new Pool({
   port: process.env.PORT
 })
 
-const getQuestions = () => {
-  return pool.query('SELECT * FROM questions LIMIT 10')
-    .then(res => {
-      return res.rows;
-    })
-    .catch(err => {
-      return err;
-    })
-}
-
 module.exports = {
   getQuestions,
 }

@@ -1,5 +1,4 @@
 require('dotenv').config();
-// const pgp = require('pg-promise')();
 const Pool = require('pg').Pool;
 
 const db = new Pool({
@@ -9,6 +8,5 @@ const db = new Pool({
   database: process.env.DATABASE,
   port: process.env.DB_PORT
 });
-// console.log(process.env.DATABASE)
 
 module.exports = db;
