@@ -11,12 +11,12 @@ const {
 
 // questions
 const getQuestions = async (req, res) => {
+  const product_id = req.params.product_id || req.query.product_id;
+  const count = req.params.count || req.query.count;
+  const page = req.params.page || req.query.page;
+
   try {
-    const questions = await getQuestionsFromDb(
-      req.params.product_id,
-      req.params.count,
-      req.params.page
-    );
+    const questions = await getQuestionsFromDb(product_id, count, page);
     res.send(questions)
   } catch (err) {
     console.log(err);
@@ -29,18 +29,18 @@ const postQuestion = async (req, res) => {
     await postQuestionsToDb([
       // check if it's in body
       req.body.product_id,
-      req.body.body,
+      req.body.question_body,
       // req.body.date,
       Date.now(),
-      req.body.name,
-      req.body.email,
+      req.body.asker_name,
+      req.body.asker_email,
     ]);
     res.sendStatus(201);
   } catch (err) {
     console.log(err);
     res.sendStatus(404);
   }
-}
+};
 
 const updateQuestionHelpfullness = async (req, res) => {
   const question_id = req.params.question_id || req.query.question_id;
@@ -68,12 +68,18 @@ const reportQuestion = async (req, res) => {
 // answers
 const getAnswers = async (req, res) => {
   const query = {
-    question_id: req.params.question_id,
+    question: req.params.question_id,
     count: req.params.count,
     page: req.params.page,
   };
   try {
     const answers = await getAnswersFromDb(query);
+    const answersId = [];
+    for (let i = 0; i < answers.length; i += 1) {
+      answersId.push(answers[i].answer_id);
+    }
+    console.log('answersId: ', answersId);
+    console.log('answers: ', answers)
     res.send(answers);
   } catch (err) {
     console.error(err);
@@ -83,11 +89,11 @@ const getAnswers = async (req, res) => {
 
 const postAnswer = async (req, res) => {
   const query = [
-    req.query.question_id,
+    req.params.question_id,
     req.body.body,
-    req.body.date,
-    req.body.name,
-    req.body.email,
+    Date.now(),
+    req.body.answerer_name,
+    req.body.answerer_email,
   ];
   try {
     await postAnswerToDb(query);

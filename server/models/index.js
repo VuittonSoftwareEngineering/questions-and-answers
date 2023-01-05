@@ -18,7 +18,7 @@ const getQuestionsFromDb = async (product_id, count, page ) => {
 const postQuestionsToDb = async (data) => {
   try {
     const query = await db.query(
-      `INSERT INTO questions (product_id, body, date_written, asker_name, asker_email) VALUES($1, $2, $3, $4, $5)`,
+      `INSERT INTO questions (product_id, question_body, question_date, asker_name, asker_email) VALUES($1, $2, $3, $4, $5)`,
       data,
     );
     return Promise.resolve(query);
@@ -53,11 +53,10 @@ const reportQuestionInDb = async (question_id) => {
 };
 
 // answers
-const getAnswersFromDb = async ({ question_id, count, page }) => {
+const getAnswersFromDb = async ({ question, count, page }) => {
   try {
-    console.log(question_id)
     const query = await db.query(
-      `SELECT * FROM answers WHERE question_id = ${question_id} AND reported = false LIMIT ${
+      `SELECT * FROM answers WHERE question = ${question} AND reported = false LIMIT ${
         count || 5
       } OFFSET ${page * count - count || 0}`,
     );
@@ -71,7 +70,7 @@ const getAnswersFromDb = async ({ question_id, count, page }) => {
 const postAnswerToDb = async (data) => {
   try {
     const query = await db.query(
-      'INSERT INTO answers (question, body, date, answerer_name, answerer_email) VALUES ($1, $2, $3, $4, $5, $6)',
+      'INSERT INTO answers (question, body, date, answerer_name, answerer_email) VALUES ($1, $2, $3, $4, $5)',
       data,
     );
     return Promise.resolve(query);
@@ -104,8 +103,6 @@ const reportAnswerInDb = async (answer_id) => {
     return Promise.reject(err);
   }
 };
-
-
 
 module.exports = {
   getQuestionsFromDb,

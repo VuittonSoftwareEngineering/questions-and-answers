@@ -11,16 +11,16 @@ const {
   reportAnswer,
 } = require('../controllers');
 
-router.get('/questions/:product_id?/:count?/:page?', getQuestions);
-router.get('/questions/:question_id/answers', getAnswers);
+router.get('/questions/:question_id/answers', getAnswers); // working
+router.get('/questions/:product_id?/:count?/:page?', getQuestions); // working
 
-router.post('/questions', postQuestion);
-router.post('/questions/:question_id/answers', postAnswer);
+router.post('/questions/:question_id/answers', postAnswer); // working
+router.post('/questions', postQuestion); // working
 
-router.put('/questions/:question_id/helpful', updateQuestionHelpfullness);
-router.put('/answers/:answer_id/helpful', updateAnswerHelpfullness);
+router.put('/questions/:question_id/helpful', updateQuestionHelpfullness); // working
+router.put('/answers/:answer_id/helpful', updateAnswerHelpfullness); // working
 
-router.put('/questions/:question_id/report', reportQuestion);
-router.put('/answers/:answer_id/report', reportAnswer);
+router.put('/questions/:question_id/report', reportQuestion); // working
+router.put('/answers/:answer_id/report', reportAnswer); // working
 
 module.exports = router;
