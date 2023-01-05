@@ -1,5 +1,19 @@
 const db = require('../db');
 
+// photos
+const getPhotosFromDb = async (answer_ids) => {
+  const answerIdsList = answer_ids.join();
+  console.log('joined answer ids from model: ', answerIdsList)
+  try {
+    const query = await db.query(
+      `SELECT * FROM photos WHERE answer_id IN (${answerIdsList})`
+    );
+    return Promise.resolve(query.rows)
+  } catch (err) {
+    console.log(err);
+    return Promise.reject(err);
+  }
+};
 // questions
 const getQuestionsFromDb = async (product_id, count, page ) => {
   try {
@@ -105,6 +119,7 @@ const reportAnswerInDb = async (answer_id) => {
 };
 
 module.exports = {
+  getPhotosFromDb,
   getQuestionsFromDb,
   postQuestionsToDb,
   putQuestionHelpfullnessInDB,

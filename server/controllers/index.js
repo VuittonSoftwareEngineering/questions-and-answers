@@ -1,4 +1,5 @@
 const {
+  getPhotosFromDb,
   getQuestionsFromDb,
   postQuestionsToDb,
   putQuestionHelpfullnessInDB,
@@ -66,6 +67,7 @@ const reportQuestion = async (req, res) => {
 };
 
 // answers
+// getAnswersFromDb(query)
 const getAnswers = async (req, res) => {
   const query = {
     question: req.params.question_id,
@@ -73,17 +75,37 @@ const getAnswers = async (req, res) => {
     page: req.params.page,
   };
   try {
-    const answers = await getAnswersFromDb(query);
-    const answersId = [];
-    for (let i = 0; i < answers.length; i += 1) {
-      answersId.push(answers[i].answer_id);
+    let answers = await getAnswersFromDb(query);
+    console.log('answers: ', answers);
+
+    const answer_ids = answers.map(answer => answer.answer_id);
+    console.log('answersId: ', answer_ids);
+
+    const photos = await getPhotosFromDb(answer_ids);
+    console.log('photos from controllers', photos);
+    // create answers object
+    answers = answers.map( answer => {
+      answer.photos = photos
+        .filter(photo => photo.answer_id === answer.answer_id)
+        .map(photo => {
+          return {
+            id: photo.id,
+            url: photo.url,
+          }
+        })
+      return answer;
+    })
+    const obj = {
+      question: req.params.question_id,
+      page: req.params.page || 0,
+      count: answers.length,
+      results: answers,
     }
-    console.log('answersId: ', answersId);
-    console.log('answers: ', answers)
-    res.send(answers);
+
+    res.status(200).json(obj);
   } catch (err) {
     console.error(err);
-    res.send(err).status(404);
+    res.status(404).send(err);
   }
 };
 
