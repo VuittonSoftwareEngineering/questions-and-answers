@@ -25,6 +25,24 @@ const getQuestions = async (req, res) => {
   }
 };
 
+// const postQuestion = async (req, res) => {
+//   try {
+//     await postQuestionsToDb([
+//       // check if it's in body
+//       4,
+//       "req.body.question_body",
+//       // req.body.date,
+//       Date.now(),
+//       "req.body.asker_name",
+//       "req.body.asker_email",
+//     ]);
+//     res.sendStatus(201);
+//   } catch (err) {
+//     console.log(err);
+//     res.sendStatus(404);
+//   }
+// };
+
 const postQuestion = async (req, res) => {
   try {
     await postQuestionsToDb([
