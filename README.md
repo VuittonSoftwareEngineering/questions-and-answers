@@ -1,1 +1,1 @@
-# questions-and-answers
+# Back end for Questions and Answers component
